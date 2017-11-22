@@ -1,0 +1,28 @@
+{application, aliyun_sms,
+ [{description, "An OTP application"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, { aliyun_sms, []}},
+  {applications,
+   [kernel,
+    stdlib
+    ,lager
+   ]},
+  {env,[
+   {gateWay,aliyun_sms}
+%%   {gateWay,aliyun_mns}
+   ,{accessId,"testId"}
+   ,{accessKey,"testSecret"}
+%%   ,{accountId,"testId"}
+%%   ,{topic,"testTopic"}
+   ,{smsSendList,[
+    {sms_type_jrj_test_mobile_verify,#{ signName => "testSign" ,templateCode => "SMS_0001"}}
+   ]}
+
+  ]},
+  {modules, []},
+
+  {maintainers, []},
+  {licenses, []},
+  {links, []}
+ ]}.

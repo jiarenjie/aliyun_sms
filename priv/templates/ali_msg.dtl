@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Message xmlns="http://mns.aliyuncs.com/doc/v1/">
+	<MessageBody>content</MessageBody>
+	<MessageAttributes>
+		<DirectSMS>
+		{{directSMS|safe}}
+		</DirectSMS>
+	</MessageAttributes>
+</Message>
