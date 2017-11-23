@@ -67,18 +67,16 @@ send_sms(#{
 %%  解析response xml
     {XmlElt, _} = xmerl_scan:string(Body2),
     try
-        [#xmlText{value = MessageBodyMD5 }] = xmerl_xpath:string("/Message/MessageBodyMD5/text()", XmlElt),
-        lager:info("MessageBodyMD5:~p",[MessageBodyMD5]),
         [#xmlText{value = MessageId }] = xmerl_xpath:string("/Message/MessageId/text()", XmlElt),
         lager:info("MessageId:~p",[MessageId]),
-        {ok,MessageId,MessageBodyMD5}
+        {ok,MessageId}
     catch
         _:_  ->
             [#xmlText{value = Code }] = xmerl_xpath:string("/Error/Code/text()", XmlElt),
             lager:error("Code:~p",[Code]),
-            [#xmlText{value = Message }] = xmerl_xpath:string("/Error/Message/text()", XmlElt),
-            lager:error("Message:~p",[Message]),
-            {error,Code,Message}
+            [#xmlText{value = RequestId }] = xmerl_xpath:string("/Error/RequestId/text()", XmlElt),
+            lager:error("RequestId:~p",[RequestId]),
+            {error,RequestId,Code}
     end;
 send_sms(Url)when is_binary(Url)->
     {ok,{_,_,Body}} = http_utils:http_get(binary_to_list(Url)),
@@ -86,13 +84,12 @@ send_sms(Url)when is_binary(Url)->
 
     try
         [#xmlText{value = RequestId }] = xmerl_xpath:string("/SendSmsResponse/RequestId/text()", XmlElt),
-        [#xmlText{value = BizId }] = xmerl_xpath:string("/SendSmsResponse/BizId/text()", XmlElt),
-        {ok,RequestId,BizId}
+        {ok,RequestId}
     catch
         _:_ ->
             [#xmlText{value = Code }] = xmerl_xpath:string("/Error/Code/text()", XmlElt),
             lager:error("Code:~p",[Code]),
-            [#xmlText{value = RequestId2 }] = xmerl_xpath:string("/Error/RequestId/text()", XmlElt),
-            lager:error("Message:~p",[RequestId2]),
-            {error,RequestId2,Code}
+            [#xmlText{value = RequestId }] = xmerl_xpath:string("/Error/RequestId/text()", XmlElt),
+            lager:error("Message:~p",[RequestId]),
+            {error,RequestId,Code}
     end.
