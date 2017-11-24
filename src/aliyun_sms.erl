@@ -89,7 +89,7 @@ send_sms(Url)when is_binary(Url)->
         _:_ ->
             [#xmlText{value = Code }] = xmerl_xpath:string("/Error/Code/text()", XmlElt),
             lager:error("Code:~p",[Code]),
-            [#xmlText{value = RequestId }] = xmerl_xpath:string("/Error/RequestId/text()", XmlElt),
-            lager:error("Message:~p",[RequestId]),
-            {error,RequestId,Code}
+            [#xmlText{value = RequestId2 }] = xmerl_xpath:string("/Error/RequestId/text()", XmlElt),
+            lager:error("Message:~p",[RequestId2]),
+            {error,RequestId2,Code}
     end.
